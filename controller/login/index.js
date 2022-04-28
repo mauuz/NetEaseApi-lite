@@ -10,4 +10,4 @@ class LoginController {
         ctx.cookies.set('MUSIC_U',ctx.state.cookie['MUSIC_U'])
     }
 }
-module.exports = new LoginController
+module.exports = new LoginController()
