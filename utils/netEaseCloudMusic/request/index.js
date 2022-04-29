@@ -194,6 +194,7 @@ const createRequest = (method, url, data, options) => {
                 else reject(answer)
             })
             .catch((err) => {
+                console.log(err)
                 answer.status = 502
                 answer.body = { code: 502, msg: err }
                 reject(answer)

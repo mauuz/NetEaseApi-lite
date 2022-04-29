@@ -7,7 +7,8 @@ const {userRouter} = require('../router/user')
 const {playListRouter} = require('../router/playList')
 
 const app = new Koa()
-app.use(KoaBody())
+//support form-data
+app.use(KoaBody({multipart: true}))
 app.use(loginRouter.routes())
 app.use(userRouter.routes())
 app.use(playListRouter.routes())

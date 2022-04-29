@@ -29,6 +29,19 @@ class userController {
 
         }
     }
+
+    async getMyDailyRecommend(ctx,next){
+        const data = {}
+        let dailySongs = await createRequest('POST',
+            `https://music.163.com/api/v3/discovery/recommend/songs`,
+            data,
+            {
+                crypto: 'weapi',
+                cookie: {__csrf:ctx.cookies.get('__csrf'),MUSIC_U:ctx.cookies.get('MUSIC_U')}
+            },)
+        ctx.body = dailySongs.body.data
+        console.log(dailySongs.body.data.dailySongs.length)
+    }
 }
 
 

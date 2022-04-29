@@ -47,6 +47,7 @@ const createQrCode = async (ctx,next)=>{
 
 const cookieParser = async (ctx,next)=>{
     let cookie = ctx.state.cookie
+    console.log(cookie)
     const processedCookie = {
 
     }
@@ -63,10 +64,10 @@ const cookieParser = async (ctx,next)=>{
         msg:ctx.state.msg,
         cookie:processedCookie
     }
+    console.log(ctx.state)
     next()
 
 }
-
 
 const checkQrcodeLoginStatus = async (ctx,next)=>{
     const uniKey=ctx.query.unikey
@@ -82,6 +83,7 @@ const checkQrcodeLoginStatus = async (ctx,next)=>{
             {
                 crypto: 'weapi',
             })
+
         if(cookie.body.code === 803 ){
             ctx.state = {
                 status:'success',
@@ -102,5 +104,111 @@ const checkQrcodeLoginStatus = async (ctx,next)=>{
             msg:'missing unikey'
         }
     }
+
+
 }
-module.exports = {createQrkey,createQrCode,checkQrcodeLoginStatus,cookieParser}
+
+const checkPhoneCaptcha = async (ctx,next)=> {
+    if(ctx.request.body.type == 0){
+        const data = {
+            ctcode: ctx.request.body.ctcode || '86',
+            cellphone: ctx.request.body.phone,
+            captcha: ctx.request.body.captcha,
+        }
+        try {
+            let status = await createRequest(
+                'POST',
+                `https://music.163.com/weapi/sms/captcha/verify`,
+                data,
+                {
+                    crypto: 'weapi',
+                }
+            )
+            console.log(status)
+            await next()
+
+        } catch (e) {
+            ctx.body = {
+                status: 'failed',
+                msg: e.body.message
+            }
+        }
+    }else if(ctx.request.body.type == 1){
+        await next()
+    }else {
+        ctx.body = {
+            status: 'failed',
+            msg: 'missing type'
+        }
+    }
+
+}
+
+const mobileLogin = async (ctx,next)=>{
+    const crypto = require('crypto')
+    const cookie = {
+        os:'pc',
+        appver:'2.9.7'
+    }
+    const data = {
+        phone:ctx.request.body.phone,
+        countrycode: ctx.request.body.countrycode || '86',
+        captcha: ctx.request.body.captcha,
+        [ctx.request.body.captcha ? 'captcha' : 'password']: ctx.request.body.captcha
+            ? ctx.request.body.captcha
+            : ctx.request.body.md5_password ||
+            crypto.createHash('md5').update(ctx.request.body.password).digest('hex'),
+        rememberLogin: 'true',
+    }
+    try {
+        let result = await createRequest(
+            'POST',
+            `https://music.163.com/api/login/cellphone`,
+            data,
+            {
+                crypto: 'weapi',
+                ua: 'pc',
+                cookie:cookie
+            }
+        )
+        if(result.body.code == 200) {
+            ctx.state = {
+                status:'success',
+                msg:result.body.profile,
+                cookie:result.cookie
+            }
+            await next()
+        }else {
+            ctx.body = {
+                status:'failed',
+                msg:result.body.message || 'inlegal input'
+            }
+        }
+
+    }catch (e) {
+        ctx.body = {
+            status:'failed',
+            msg:'failed to login',
+        }
+    }
+
+}
+
+
+const autoRefreshLoginCookie = async(ctx,next)=> {
+    let result = await createRequest(
+        'POST',
+        `https://music.163.com/weapi/login/token/refresh`,
+        {},
+        {
+            crypto: 'weapi',
+            ua: 'pc',
+            cookie: {__csrf:ctx.cookies.get('__csrf'),MUSIC_U:ctx.cookies.get('MUSIC_U'),__remember_me:true}
+        },
+    )
+    console.log(result)
+
+}
+
+
+module.exports = {createQrkey,createQrCode,checkQrcodeLoginStatus,cookieParser,checkPhoneCaptcha,mobileLogin,autoRefreshLoginCookie}
