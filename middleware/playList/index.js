@@ -35,7 +35,6 @@ const getAllSongsFromId = async (ctx,next)=>{
     await  next()
 }
 
-
 const checkId= async (ctx,next)=>{
     reg = /^[0-9]*$/
     if(ctx.query.id){
@@ -71,4 +70,7 @@ const getSongDetails = async (ctx,next)=>{
     ctx.state.playList = songDetails
     await next()
 }
+
+
+
 module.exports = {getPlayList,checkId,getAllSongsFromId,getSongDetails}

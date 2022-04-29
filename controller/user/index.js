@@ -2,6 +2,7 @@ const {createRequest} = require('../../utils/netEaseCloudMusic/request')
 const {readCookie} = require('../../utils/cookieReader')
 const {errorRes} = require('../../src/constant/error')
 const {successRes} = require('../../src/constant/success')
+
 class userController {
     async getUserProfile(ctx, next) {
         ctx.body= {
