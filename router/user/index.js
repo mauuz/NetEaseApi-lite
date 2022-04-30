@@ -7,7 +7,7 @@ const { checkIfLogin,checkPage } = require('../../middleware/user')
 const {
     getUserProfile,getMyList, getMyDailyRecommend,getLevelDetail,signIn,
     getMyFM,trashFm,availableHistoryDateForDailySongs,getHistoryDailySongs,
-    addSongToMyplaylist,delSongFromMyplaylist
+    addSongToMyplaylist,delSongFromMyplaylist,intelligenceMode,likeSong
 } = require('../../controller/user')
 
 
@@ -66,5 +66,16 @@ userRouter.get('/myplaylist/add',checkIfLogin,addSongToMyplaylist)
  * @query tracks 歌曲id ，多个用逗号隔开
  * **/
 userRouter.get('/myplaylist/del',checkIfLogin,delSongFromMyplaylist)
+/**
+ *
+ *     songId: query.id,
+ playlistId: query.pid,
+ startMusicId: query.sid || query.id,
+ count: query.count || 1,
+ * **/
+userRouter.get('/myplaylist/intelligenceMode',checkIfLogin,intelligenceMode)
+
+
+userRouter.get('/myplaylist/like',checkIfLogin,intelligenceMode,likeSong)
 
 module.exports = {userRouter}

@@ -150,8 +150,6 @@ class userController {
 
     }
 
-
-
     /**
      *
      *         "data": {
@@ -217,7 +215,6 @@ class userController {
     }
 
     async addSongToMyplaylist(ctx,next){
-
         const tracks = ctx.query.tracks.split(',') || ''
         const data = {
             op: 'add',
@@ -280,6 +277,54 @@ class userController {
         }catch (e) {
             ctx.body = errorRes(e.body.message)
         }
+    }
+
+    //心动模式 返回不止一首歌，会有几百首
+    async intelligenceMode(ctx,next){
+        const data = {
+            songId: ctx.query.id,
+            type: 'fromPlayOne',
+            playlistId: ctx.query.pid,
+            startMusicId: ctx.query.sid || ctx.query.id,
+            count: ctx.query.count || 1,
+        }
+        try {
+            let recommendSongList =await createRequest(
+                'POST',
+                `https://music.163.com/weapi/playmode/intelligence/list`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: readCookie(ctx),
+                }
+            )
+
+            ctx.body = successRes(recommendSongList.body.data)
+            console.log(ctx.body.msg.length)
+        }catch (e) {
+            ctx.body = errorRes(e.body)
+        }
+
+    }
+
+    async likeSong(ctx,next){
+        ctx.query.like = ctx.query.like == 'false' ? false : true
+        const data = {
+            alg: 'itembased',
+            trackId: ctx.query.id,
+            like: ctx.query.like,
+            time: '3',
+        }
+        try {
+            let res=await createRequest('POST', `https://music.163.com/api/radio/like`, data, {
+                crypto: 'weapi',
+                cookie: {...readCookie(ctx),os:'pc',appver: '2.9.7'},
+            })
+            ctx.body = res.body
+        }catch (e) {
+            ctx.body = errorRes(e.body.message)
+        }
+
     }
 }
 
