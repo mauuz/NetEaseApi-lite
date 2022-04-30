@@ -331,6 +331,72 @@ class userController {
         }
 
     }
+
+    async recentSong(ctx,next){
+        const data = {
+            limit: ctx.query.limit || 100,
+        }
+
+        try {
+            let songList = await createRequest(
+                'POST',
+                `https://music.163.com/api/play-record/song/list`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: readCookie(ctx)
+                }
+            )
+            ctx.body = successRes(songList.body.data)
+        }catch (e) {
+            ctx.body = e.body.message
+        }
+
+    }
+
+    async recentPlayList(ctx,next){
+        const data = {
+            limit: ctx.query.limit || 100,
+        }
+
+        try {
+            let songList =await createRequest(
+                'POST',
+                `https://music.163.com/api/play-record/playlist/list`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: readCookie(ctx)
+                },
+            )
+            ctx.body = successRes(songList.body.data)
+        }catch (e) {
+            ctx.body = e.body.message
+        }
+
+    }
+
+    async recentAlbum(ctx,next){
+        const data = {
+            limit: ctx.query.limit || 100,
+        }
+
+        try {
+            let songList =await createRequest(
+                'POST',
+                `https://music.163.com/api/play-record/album/list`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: readCookie(ctx)
+                },
+            )
+            ctx.body = successRes(songList.body.data)
+        }catch (e) {
+            ctx.body = e.body.message
+        }
+
+    }
 }
 
 
