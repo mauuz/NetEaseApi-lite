@@ -1,5 +1,8 @@
 //userMiddleware
 const {createRequest} = require ('../../utils/netEaseCloudMusic/request')
+const {readCookie} = require('../../utils/cookieReader')
+const {errorRes} = require('../../src/constant/error')
+const {successRes} = require('../../src/constant/success')
 
 const checkIfLogin = async (ctx,next)=>{
     const data = {}
@@ -54,6 +57,7 @@ const checkPage = async (ctx,next)=>{
     }
 
 }
+
 
 
 module.exports = {

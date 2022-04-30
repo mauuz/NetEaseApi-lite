@@ -1,3 +1,4 @@
+//userController
 const {createRequest} = require('../../utils/netEaseCloudMusic/request')
 const {readCookie} = require('../../utils/cookieReader')
 const {errorRes} = require('../../src/constant/error')
@@ -147,6 +148,138 @@ class userController {
             ctx.body = errorRes(e.body.message)
         }
 
+    }
+
+
+
+    /**
+     *
+     *         "data": {
+            "dates": [
+                "2022-04-29",
+                "2022-02-27"
+            ],
+            "purchaseUrl": "https://music.163.com/prime/m/purchase?luxury=1&situation=dailyHistory",
+            "description": "您已尊享查看60天内近5次历史日推的特权",
+            "noHistoryMessage": "黑胶VIP可查看近期5次历史记录，明天再来就会有哦"
+        }
+     * **/
+    async availableHistoryDateForDailySongs(ctx,next){
+        const data = {}
+        try {
+            let dateList = await createRequest(
+                'POST',
+                `https://music.163.com/api/discovery/recommend/songs/history/recent`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: {...readCookie(ctx),os:'ios'}
+
+                },
+            )
+            if(dateList.body.code == 200){
+                ctx.body = successRes(dateList.body.data)
+            }else {
+                ctx.body = errorRes('failed to get history')
+            }
+
+        }catch (e) {
+            ctx.body = errorRes(e.body.message)
+        }
+    }
+
+    /**
+     *
+     * @query date:2022-1-2
+     *
+     * **/
+    async getHistoryDailySongs(ctx,next){
+        const data = {
+            date: ctx.query.date || '',
+        }
+        try {
+            let songList = await createRequest(
+                'POST',
+                `https://music.163.com/api/discovery/recommend/songs/history/detail`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: {...readCookie(ctx),os:'ios'},
+                },
+            )
+            ctx.body = successRes(songList.body.data)
+
+        }catch (e) {
+            ctx.body = errorRes(e.body.message)
+        }
+
+
+    }
+
+    async addSongToMyplaylist(ctx,next){
+
+        const tracks = ctx.query.tracks.split(',') || ''
+        const data = {
+            op: 'add',
+            pid: ctx.query.pid, // 歌单id
+            trackIds: JSON.stringify(tracks), // 歌曲id
+            imme: 'true',
+        }
+
+        try {
+            let res = await createRequest(
+                'POST',
+                `https://music.163.com/api/playlist/manipulate/tracks`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: {...readCookie(ctx), os: 'pc'}
+                },
+            )
+            console.log(res)
+            if(res.body.code == 200) {
+                ctx.body = successRes(res.body)
+            }else {
+                ctx.body = errorRes(res.body.message)
+            }
+
+
+        }catch (e) {
+            ctx.body = errorRes(e.body.message)
+        }
+    }
+
+    async delSongFromMyplaylist(ctx,next){
+
+        const tracks = ctx.query.tracks.split(',') || ''
+        const data = {
+            op: 'del',
+            pid: ctx.query.pid, // 歌单id
+            trackIds: JSON.stringify(tracks), // 歌曲id
+            imme: 'true',
+        }
+
+        try {
+            let res = await createRequest(
+                'POST',
+                `https://music.163.com/api/playlist/manipulate/tracks`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: {...readCookie(ctx), os: 'pc'}
+                },
+            )
+            console.log(res)
+            if(res.body.code == 200) {
+                ctx.body = successRes(res.body)
+            }else {
+                ctx.body = errorRes(res.body.message)
+            }
+
+
+        }catch (e) {
+            ctx.body = errorRes(e.body.message)
+        }
     }
 }
 
