@@ -1,6 +1,7 @@
 
 # 网易云纯享版
-
+基于[Binaryify](https://github.com/Binaryify)/**[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)** 的二次封装
+开发语言：nodejs /koa2
 状态：开发中 </br>
 进度：63%   (19/30)
 日期：2022/4/30
@@ -10,7 +11,7 @@
 - 扫码登陆 ✔
 - 短信登陆 ✔
 - 账号密码登陆 ✔
-- 登出
+- 登出 
 
 2.用户
 - 获取用户基本信息 ✔
