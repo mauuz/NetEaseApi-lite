@@ -307,6 +307,11 @@ class userController {
 
     }
 
+
+    /**
+     *@query id 歌曲id
+     *@query like true/false
+     * **/
     async likeSong(ctx,next){
         ctx.query.like = ctx.query.like == 'false' ? false : true
         const data = {
@@ -320,7 +325,7 @@ class userController {
                 crypto: 'weapi',
                 cookie: {...readCookie(ctx),os:'pc',appver: '2.9.7'},
             })
-            ctx.body = res.body
+            ctx.body = successRes(res.body)
         }catch (e) {
             ctx.body = errorRes(e.body.message)
         }

@@ -76,6 +76,10 @@ userRouter.get('/myplaylist/del',checkIfLogin,delSongFromMyplaylist)
 userRouter.get('/myplaylist/intelligenceMode',checkIfLogin,intelligenceMode)
 
 
-userRouter.get('/myplaylist/like',checkIfLogin,intelligenceMode,likeSong)
+/**
+ *@query id 歌曲id
+ *@query like true/false
+ * **/
+userRouter.get('/myplaylist/like',checkIfLogin,likeSong)
 
 module.exports = {userRouter}
