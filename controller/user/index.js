@@ -1,6 +1,8 @@
 //userController
 const {createRequest} = require('../../utils/netEaseCloudMusic/request')
+//readcookie from cookie / post / get
 const {readCookie} = require('../../utils/cookieReader')
+//response constant function
 const {errorRes} = require('../../src/constant/error')
 const {successRes} = require('../../src/constant/success')
 
@@ -279,6 +281,28 @@ class userController {
         }
     }
 
+    async subscribePlaylist(ctx, next) {
+        ctx.request.body.t = ctx.request.body.t == 1 ? 'subscribe' : 'unsubscribe'
+        const data = {
+            id: ctx.request.body.id,
+        }
+        try {
+            let res = await createRequest(
+                'POST',
+                `https://music.163.com/weapi/playlist/${ctx.request.body.t}`,
+                data,
+                {
+                    crypto: 'weapi',
+                    cookie: readCookie(ctx),
+                }
+            )
+            ctx.body = successRes('success')
+        }catch (e) {
+            ctx.body = errorRes(e.body)
+        }
+
+    }
+
     //心动模式 返回不止一首歌，会有几百首
     async intelligenceMode(ctx,next){
         const data = {
@@ -306,7 +330,6 @@ class userController {
         }
 
     }
-
 
     /**
      *@query id 歌曲id
@@ -397,6 +420,8 @@ class userController {
         }
 
     }
+
+
 }
 
 

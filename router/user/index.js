@@ -8,7 +8,7 @@ const {
     getUserProfile,getMyList, getMyDailyRecommend,getLevelDetail,signIn,
     getMyFM,trashFm,availableHistoryDateForDailySongs,getHistoryDailySongs,
     addSongToMyplaylist,delSongFromMyplaylist,intelligenceMode,likeSong,
-    recentSong,recentPlayList,recentAlbum
+    recentSong,recentPlayList,recentAlbum,subscribePlaylist
 } = require('../../controller/user')
 
 
@@ -75,6 +75,13 @@ userRouter.get('/myplaylist/del',checkIfLogin,delSongFromMyplaylist)
  * **/
 userRouter.get('/myplaylist/intelligenceMode',checkIfLogin,intelligenceMode)
 
+/**
+ * @params t 1：subscribe 0 ：unsubcribe
+ * @params id 歌单 id
+ * **/
+userRouter.post('/myplaylist/subscribe',checkIfLogin,subscribePlaylist)
+
+
 
 /**
  *@query id 歌曲id
@@ -86,5 +93,6 @@ userRouter.get('/myplaylist/like',checkIfLogin,likeSong)
 userRouter.get('/recent/song',checkIfLogin,recentSong)
 userRouter.get('/recent/playlist',checkIfLogin,recentPlayList)
 userRouter.get('/recent/album',checkIfLogin,recentAlbum)
+
 
 module.exports = {userRouter}
