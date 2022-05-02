@@ -1,7 +1,7 @@
 
 # 网易云纯享版
 调用官网api的加解密功能均来自[Binaryify](https://github.com/Binaryify)/**[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)** </br>
-本项目只保留基础功能，对路由和请求api重新封装，并使用koa2进行低耦合重构，并加入缓存和数据库机制，防止api过度调用 </br>
+本项目只保留基础功能，对路由和请求api重新封装，并使用koa2进行低耦合重构，并加入缓存和数据库机制</br>
 开发语言：nodejs /koa2 </br>
 状态：开发中 </br>
 进度：63%   (19/30) </br>
