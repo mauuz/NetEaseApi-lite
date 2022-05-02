@@ -233,20 +233,20 @@ const loginStatus = async (cookie)=>{
 // getUserDetail('')
 
 // loginStatus(cookie)
-
-// getAccount(cookie2)
-
-function cookieParser(cookie){
-    const processedCookie = {
-
-    }
-    cookie.forEach((a)=>{
-        reg = /^MUSIC_U=(.*?);/i
-        reg1 =/^__csrf=(.*?);/i
-        let MUSIC_U = a.match(reg)
-        let __csrf = a.match(reg1)
-        MUSIC_U && Object.assign(processedCookie,{MUSIC_U:MUSIC_U[1]})
-        __csrf && Object.assign(processedCookie,{__csrf:__csrf[1]})
-    })
-    return processedCookie
-}
+getMusicUrl('1343946237',123123)
+//getAccount(cookie2)
+//
+// function cookieParser(cookie){
+//     const processedCookie = {
+//
+//     }
+//     cookie.forEach((a)=>{
+//         reg = /^MUSIC_U=(.*?);/i
+//         reg1 =/^__csrf=(.*?);/i
+//         let MUSIC_U = a.match(reg)
+//         let __csrf = a.match(reg1)
+//         MUSIC_U && Object.assign(processedCookie,{MUSIC_U:MUSIC_U[1]})
+//         __csrf && Object.assign(processedCookie,{__csrf:__csrf[1]})
+//     })
+//     return processedCookie
+// }
